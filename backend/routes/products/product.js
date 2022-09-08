@@ -5,10 +5,9 @@ const {Product} = require('../../models/products/product');
 router.get('/',async (req,res)=>{
     const products = await Product.find()
     if (!products) {
-        res.status(500).json({success:false})
-        
+        res.status(500).json({success:false}) 
     }
-    res.send(products);
+    res.send(products)   
 })
 
 router.post('/',(req,res)=>{
