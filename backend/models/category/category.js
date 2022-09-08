@@ -9,7 +9,7 @@ const categorySchema = mongoose.Schema({
     icon: String,
     color: String,
     image: String
-        
+    
 })
 
 exports.Category = mongoose.model('Category', categorySchema)

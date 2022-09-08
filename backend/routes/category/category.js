@@ -12,14 +12,15 @@ router.get('/',async (req,res)=>{
     res.status(200).send(categories)
 })
 
+
 router.get('/:id',async (req,res)=>{
-    const categories = await Category.findById(req.params.id)
-    if (!categories) {
+    const category = await Category.findById(req.params.id)
+    if (!category) {
         res.status(500).json({success:false,
         message:"Category does not exist"})
         
     }
-    res.status(200).send(categories)
+    res.status(200).send(category)
 })
 
 router.post('/',async (req,res)=>{
