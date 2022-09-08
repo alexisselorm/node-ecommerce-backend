@@ -2,8 +2,20 @@ require('dotenv').config();
 const express =require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const cors = require('cors');
+
 
 const app = express();
+/*
+All http requests from external servers will be allowed by cors
+*/
+app.use(cors())
+app.options('*',cors())
+/*
+CORS end here
+*/
+
+
 const api  = process.env.API_URL;
 
 // Routes
