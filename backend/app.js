@@ -3,7 +3,8 @@ const express =require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
+const authJwt = require('./helpers/jwt');
+const errorHandler = require('./helpers/error-handler')
 
 const app = express();
 /*
@@ -23,7 +24,6 @@ const productsRoutes = require('./routes/products/product');
 const userRoutes = require('./routes/users/user');
 const orderRoutes = require('./routes/orders/order');
 const categoryRoutes = require('./routes/category/category');
-const authJwt = require('./helpers/jwt');
 
 // Connections
 mongoose.connect(process.env.CONNECTION_STRING,{
@@ -41,7 +41,8 @@ mongoose.connect(process.env.CONNECTION_STRING,{
 // Middlewares
 app.use(express.json());
 app.use(morgan('tiny'));
-app.use(authJwt)
+app.use(authJwt())
+app.use(errorHandler)
 
 // Routes
 app.use(`${api}/products`,productsRoutes)
