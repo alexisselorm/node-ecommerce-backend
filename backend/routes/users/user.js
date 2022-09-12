@@ -22,6 +22,14 @@ router.get('/:id', async(req,res)=>{
   
 })
 
+router.get('/get/count',async (req,res)=>{
+    const usersCount = await User.countDocuments()
+    if (!usersCount) {
+        res.status(500).json({success:false}) 
+    }
+    res.send({count:usersCount})   
+})
+
 router.post('/login', async (req,res)=>{
     const user = await User.findOne({email:req.body.email})
     const secret = process.env.SECRET
@@ -60,6 +68,29 @@ router.post('/register',async (req,res)=>{
     if(!user) return res.status(500).json({success: false})
     res.status(201).send(user)
 
+})
+
+router.delete('/:id',(req,res)=>{
+    User.findByIdAndRemove(req.params.id)
+    .then((user)=>{
+        if(user){
+            return res.status(200).json({
+                success:true,
+                mesage:"user deleted"
+            })
+        }else{
+            return res.status(200).json({
+                success:false,
+                mesage:"user not found"
+            })
+        }
+    })
+    .catch((err)=>{
+        return res.status(400).json({
+            error: err,
+            success:false,
+            message:"Some error occurred"})
+    })
 })
 
 module.exports=router

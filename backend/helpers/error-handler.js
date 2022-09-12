@@ -8,6 +8,7 @@ function errorHandler(err, req, res, next) {
         return res.status(401).json({ message: "The user is not authorized" });
     }
     if (err) {
+        console.log(err)
         return res.status(500).json(err);
     }
 }

@@ -44,7 +44,7 @@ router.get('/get/featured/:count',async (req,res)=>{
 
 router.post('/',async (req,res)=>{
     const category = await Category.findById(req.body.category)
-    console.log(category);
+    // console.log(category);
     if(!category) return res.status(400).send("Error with category")
     let product = new Product({
         image: req.body.image,
