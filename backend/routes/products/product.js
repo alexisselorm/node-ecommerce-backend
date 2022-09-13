@@ -7,12 +7,12 @@ const {Category} = require('../../models/category/category');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, '/public/uploads')
+      cb(null, 'public/uploads')
     },
     filename: function (req, file, cb) {
         const fileName = file.originalname.replace(' ','-')
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      cb(null, fileName + '-' + uniqueSuffix)
+      cb(null, `${fileName}-${uniqueSuffix}.${extension}` )
     }
   })
   
