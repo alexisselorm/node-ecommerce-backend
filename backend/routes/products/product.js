@@ -5,13 +5,25 @@ const multer = require('multer')
 const {Product} = require('../../models/products/product');
 const {Category} = require('../../models/category/category');
 
+const FILE_TYPE_MAP={
+    'image/png':'png',
+    'image/jpeg':'jpeg',
+    'image/jpg':'jpg'
+}
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, 'public/uploads')
+        const isValid = FILE_TYPE_MAP[file.mimetype]
+
+        let uploadError = new Error('invalid image type')
+        if (isValid) {
+            uploadError = null
+        }
+      cb(uploadError, 'public/uploads')
     },
     filename: function (req, file, cb) {
         const fileName = file.originalname.replace(' ','-')
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        const extension = FILE_TYPE_MAP[file.mimetype]
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
       cb(null, `${fileName}-${uniqueSuffix}.${extension}` )
     }
   })
@@ -58,6 +70,9 @@ router.get('/get/featured/:count',async (req,res)=>{
 })
 
 router.post('/',upload.single('image'),async (req,res)=>{
+    
+    const file = req.file
+    if(!file) return res.status(400).send("Image is missing from the request")
     const category = await Category.findById(req.body.category)
     // console.log(category);
     if(!category) return res.status(400).send("Error with category")
@@ -89,16 +104,31 @@ router.post('/',upload.single('image'),async (req,res)=>{
     }
 })
 
-router.put('/:id',async (req,res)=>{
+router.put('/:id',upload.single('image'),async (req,res)=>{
     if(!mongoose.isValidObjectId(req.params.id)){
         res.status(400).send("Error with category id")
     }
     const category = await Category.findById(req.body.category)
     if(!category) return res.status(400).send("Error with category")
+
+    const productId = await Product.findById(req.params.id)
+    if(!productId) return res.status(400).send('Invalid product')
+    
+    let imagepath;
+    const file = req.file
+    if(file){
+
+        const fileName = req.file.filename
+        const baseUrl = `${req.protocol}://${req.get('host')}/public/uploads/`
+        imagepath = `${baseUrl}${fileName}`
+    }else{
+        imagepath = product.iamge
+    }
+    
     const product = await Product.findByIdAndUpdate(req.params.id,{
-        image: req.body.image,
         brand: req.body.brand,
         price: req.body.price,
+        image: imagepath,
         rating: req.body.rating,
         numReviews: req.body.numReviews,
         isFeatured: req.body.isFeatured,
