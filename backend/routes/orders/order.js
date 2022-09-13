@@ -67,6 +67,13 @@ router.put('/:id',async(req,res)=>{
     res.status(201).send(order)
 })
 
+router.get('/get/totalsales', async(req,res)=>{
+    const totalSales = await Order.aggregate([
+        {$group:{_id:null,totalsales:{$sum: '$totalPrice'}}}
+    ])
+    return !totalSales ? res.status(400).send('The total sales cannot be generated') : res.send({totalsales:totalSales.pop().totalsales});
+})
+
 // My code that works <-- Mostly -->
 // router.delete('/:id', async (req,res)=>{
 //     let order =await Order.findByIdAndRemove(req.params.id, async (orderItem)=>{
