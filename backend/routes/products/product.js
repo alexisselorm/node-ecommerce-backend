@@ -1,8 +1,23 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router()
+const multer = require('multer')
 const {Product} = require('../../models/products/product');
 const {Category} = require('../../models/category/category');
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, '/public/uploads')
+    },
+    filename: function (req, file, cb) {
+        const fileName = file.originalname.replace(' ','-')
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+      cb(null, fileName + '-' + uniqueSuffix)
+    }
+  })
+  
+  const upload = multer({ storage: storage 
+})
 
 
 router.get('/',async (req,res)=>{
@@ -42,16 +57,18 @@ router.get('/get/featured/:count',async (req,res)=>{
     res.send(Featuredproducts)   
 })
 
-router.post('/',async (req,res)=>{
+router.post('/',upload.single('image'),async (req,res)=>{
     const category = await Category.findById(req.body.category)
     // console.log(category);
     if(!category) return res.status(400).send("Error with category")
+    const fileName = req.file.filename
+    const baseUrl = `${req.protocol}://${req.get('host')}/public/uploads/`
     let product = new Product({
-        image: req.body.image,
         brand: req.body.brand,
         price: req.body.price,
         rating: req.body.rating,
         numReviews: req.body.numReviews,
+        image: `${baseUrl}${fileName}`,
         isFeatured: req.body.isFeatured,
         name: req.body.name,
         description: req.body.description,
