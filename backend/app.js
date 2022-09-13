@@ -3,7 +3,6 @@ const express =require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
 const authJwt = require('./helpers/jwt');
 const errorHandler = require('./helpers/error-handler')
 
@@ -42,7 +41,10 @@ mongoose.connect(process.env.CONNECTION_STRING,{
 // Middlewares
 app.use(express.json());
 app.use(morgan('tiny'));
-app.use(authJwt())
+// app.use(express.static('public/uploads'))
+app.use('/public/uploads',express.static('public/uploads'))
+
+//app.use(authJwt())
 app.use(errorHandler)
 
 // Routes

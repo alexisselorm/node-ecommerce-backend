@@ -174,4 +174,32 @@ router.delete('/:id',(req,res)=>{
     })
 })
 
+router.put('/gallery-images/:id',upload.array('images',10),async (req,res)=>{
+    if(!mongoose.isValidObjectId(req.params.id)){
+        res.status(400).send("Error with category id")
+    }
+    let imagePaths=[];
+    
+    const baseUrl = `${req.protocol}://${req.get('host')}/public/uploads/`
+    const files = req.files
+    console.log(files);
+    if(files){
+        
+       files.map(file=>{
+        imagePaths.push(`${baseUrl}${file.originalname}`)
+       }) 
+    }
+
+    const product = await Product.findByIdAndUpdate(req.params.id,{
+        images:imagePaths
+    },
+    {new:true})
+    if (!product) {
+        return res.status(500).json({
+             success: false
+         })
+     }
+
+    res.send(product)
+})
 module.exports=router
