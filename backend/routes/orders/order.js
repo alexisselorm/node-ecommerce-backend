@@ -5,7 +5,9 @@ const {OrderItem} = require('../../models/orderItems/orderItem');
 
 
 router.get('/:id',async (req,res)=>{
-    const orders = await Order.findById(req.params.id).populate('user','name')
+    const orders = await Order.findById(req.params.id)
+    .populate('user','name')
+    .populate({path:'orderItems',populate:'product'})
     if (!orders) {
         res.status(500).json({success:false})
         
