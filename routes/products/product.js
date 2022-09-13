@@ -90,7 +90,7 @@ router.post('/',upload.single('image'),async (req,res)=>{
         category: req.body.category,
         reviews: req.body.reviews,
         countInStock: req.body.countInStock,
-        images: req.body.images,
+        // images: req.body.images,
         richDescription: req.body.richDescription
     })
     product = await product.save() 
