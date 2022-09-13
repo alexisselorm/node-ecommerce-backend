@@ -74,6 +74,11 @@ router.get('/get/totalsales', async(req,res)=>{
     return !totalSales ? res.status(400).send('The total sales cannot be generated') : res.send({totalsales:totalSales.pop().totalsales});
 })
 
+router.get('/get/count',async (req,res)=>{
+    const orderCount = await Order.countDocuments()
+    return !orderCount ? res.status(400).send("We couldn't count jack") : res.send({orders:orderCount});
+
+})
 // My code that works <-- Mostly -->
 // router.delete('/:id', async (req,res)=>{
 //     let order =await Order.findByIdAndRemove(req.params.id, async (orderItem)=>{
@@ -97,6 +102,16 @@ router.delete('/:id', (req, res)=>{
     }).catch(err=>{
        return res.status(500).json({success: false, error: err}) 
     })
+})
+
+router.get('/get/userorders/:userid',async (req,res)=>{
+    const orders = await Order.find({user:req.params.userid}).
+    populate({path:'orderItems',populate:{path:'product',populate:'category'}}).sort({'dateOrdered':-1})
+    if (!orders) {
+       return res.status(500).json({success:false})
+        
+    }
+    res.send(orders)
 })
 
 module.exports=router
