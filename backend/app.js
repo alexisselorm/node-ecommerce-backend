@@ -29,7 +29,7 @@ const categoryRoutes = require('./routes/category/category');
 mongoose.connect(process.env.CONNECTION_STRING,{
     useNewUrlParser:true,
     useUnifiedTopology: true,
-    dbName: 'udemy-eshop'
+    dbName: process.env.DB_NAME
 })
 .then(()=>{
     console.log("Connection successful");
@@ -53,8 +53,8 @@ app.use(`${api}/users`,userRoutes)
 app.use(`${api}/orders`,orderRoutes)
 app.use(`${api}/categories`,categoryRoutes)
 
-
-app.listen(3000,()=>{
+const port = process.env.PORT || 3000
+app.listen(port,()=>{
     console.log("Server started on http://localhost:3000")
 })
 
