@@ -13,16 +13,10 @@ All http requests from external servers will be allowed by cors
 app.use(cors())
 app.options('*',cors())
 // CORS end here
-
-
-
-const api  = process.env.API_URL;
-
 // Routes
-const productsRoutes = require('./routes/products/product');
-const userRoutes = require('./routes/users/user');
-const orderRoutes = require('./routes/orders/order');
-const categoryRoutes = require('./routes/category/category');
+const api = process.env.API_URL, productsRoutes = require('./routes/products/product'),
+    userRoutes = require('./routes/users/user'), orderRoutes = require('./routes/orders/order'),
+    categoryRoutes = require('./routes/category/category');
 
 // Connections
 mongoose.connect(process.env.CONNECTION_STRING,{
@@ -43,7 +37,7 @@ app.use(morgan('tiny'));
 // app.use(express.static('public/uploads'))
 app.use('/public/uploads',express.static('public/uploads'))
 
-//app.use(authJwt())
+app.use(authJwt())
 app.use(errorHandler)
 
 // Routes
