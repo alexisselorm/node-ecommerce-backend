@@ -12,9 +12,8 @@ All http requests from external servers will be allowed by cors
 */
 app.use(cors())
 app.options('*',cors())
-/*
-CORS end here
-*/
+// CORS end here
+
 
 
 const api  = process.env.API_URL;
