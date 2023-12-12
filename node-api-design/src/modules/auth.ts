@@ -12,7 +12,11 @@ export const hashPassword = (password) => {
 export const createJWT = (user) => {
   const token = jwt.sign(
     { id: user.id, username: user.username },
-    process.env.JWT_SECRET
+    process.env.JWT_SECRET,
+    {
+      issuer: "Alexis",
+      expiresIn: "1d",
+    }
   );
 
   return token;
