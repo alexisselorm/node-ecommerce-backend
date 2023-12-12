@@ -1,11 +1,11 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-const comparePasswords = (password, hashPassword) => {
+export const comparePasswords = (password, hashPassword) => {
   return bcrypt.compare(password, hashPassword);
 };
 
-const hashPassword = (password) => {
+export const hashPassword = (password) => {
   return bcrypt.hash(password, 5);
 };
 
