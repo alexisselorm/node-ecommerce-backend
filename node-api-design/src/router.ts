@@ -1,4 +1,6 @@
 import { Router } from "express";
+import { body, validationResult } from "express-validator";
+import { STATUS_CODES } from "http";
 
 const router = Router();
 
@@ -7,8 +9,19 @@ router.get("/product", (req, res) => {
   res.json({ message: "doggy" });
 });
 router.get("/product/:id", (req, res) => {});
-router.put("/product/:id", (req, res) => {});
-router.post("/product", (req, res) => {});
+router.put("/product/:id", body("name").isString(), (req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    res.status(400);
+    console.log(errors);
+    res.json({ errors: errors.array() });
+  }
+});
+router.post("/product", (req, res) => {
+  if (!req.body.name) {
+  }
+});
 router.delete("/product/:id", (req, res) => {});
 
 //UPDATES
