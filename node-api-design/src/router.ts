@@ -2,14 +2,13 @@ import { Router } from "express";
 import { body, oneOf, validationResult } from "express-validator";
 import { STATUS_CODES } from "http";
 import { handleInputErrors } from "./modules/middleware";
+import { createProduct, getProductById, getProducts } from "./handlers/product";
 
 const router = Router();
 
 //PRODUCTS
-router.get("/product", (req, res) => {
-  res.json({ message: "doggy" });
-});
-router.get("/product/:id", (req, res) => {});
+router.get("/product", getProducts);
+router.get("/product/:id", getProductById);
 router.put(
   "/product/:id",
   body("name").exists().isString(),
@@ -19,10 +18,7 @@ router.put(
 router.post(
   "/product",
   [body("name").exists().isString(), handleInputErrors],
-  (req, res) => {
-    if (!req.body.name) {
-    }
-  }
+  createProduct
 );
 router.delete("/product/:id", (req, res) => {});
 
