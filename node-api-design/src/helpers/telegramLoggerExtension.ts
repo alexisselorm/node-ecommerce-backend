@@ -17,7 +17,9 @@ class TelegramTransport extends TransportStream {
     });
 
     // Send log message to Telegram
-    const message = `[${info.level.toUpperCase()}] ${info.message}`;
+    const message = ` ${new Date().toISOString()} - [${info.level.toUpperCase()}] ${
+      info.message
+    }`;
     bot.sendMessage(this.chatId, message);
 
     callback();
