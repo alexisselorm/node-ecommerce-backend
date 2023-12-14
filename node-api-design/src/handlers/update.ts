@@ -38,7 +38,7 @@ export const createUpdate = async (req, res) => {
   try {
     logger.info("Atttempting update");
     const update = await prisma.update.create({
-      data: { updatedAt: new Date().toISOString(), ...req.body },
+      data: req.body,
     });
     res.json({ data: update });
     logger.info("Update successful");
