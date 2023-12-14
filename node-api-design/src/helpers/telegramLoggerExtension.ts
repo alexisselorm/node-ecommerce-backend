@@ -29,6 +29,7 @@ class TelegramTransport extends TransportStream {
 const logger = winston.createLogger({
   transports: [
     new TelegramTransport({ level: "info", chatId: process.env.CHAT_ID }),
+    new winston.transports.Console({ level: "error" }),
   ],
 });
 

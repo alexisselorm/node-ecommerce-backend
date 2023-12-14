@@ -14,13 +14,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-  console.log("hello from express");
-  res.status(200);
-  res.json({ message: "Hello from express" });
+  throw new Error("hello world!");
 });
 
 app.use("/api", protect, router);
 app.post("/user", createNewUser);
 app.post("/signin", signin);
+
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.json({ message: "oops there was an error", error: err });
+});
 
 export default app;
