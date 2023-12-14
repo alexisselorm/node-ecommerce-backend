@@ -2,7 +2,12 @@ import { Router } from "express";
 import { body, oneOf, validationResult } from "express-validator";
 import { STATUS_CODES } from "http";
 import { handleInputErrors } from "./modules/middleware";
-import { createProduct, getProductById, getProducts } from "./handlers/product";
+import {
+  createProduct,
+  deleteProduct,
+  getProductById,
+  getProducts,
+} from "./handlers/product";
 
 const router = Router();
 
@@ -20,7 +25,7 @@ router.post(
   [body("name").exists().isString(), handleInputErrors],
   createProduct
 );
-router.delete("/product/:id", (req, res) => {});
+router.delete("/product/:id", deleteProduct);
 
 //UPDATES
 router.get("/update", (req, res) => {});
@@ -41,8 +46,7 @@ router.post(
   [
     body("title").exists().isString(),
     body("body").exists().isString(),
-    body("status").isIn(["IN_PROGRRESS", "SHIPPED", "DEPRECATED"]),
-    body("version").exists(),
+    body("productId").exists().isString(),
     handleInputErrors,
   ],
   (req, res) => {}
