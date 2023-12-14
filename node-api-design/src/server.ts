@@ -14,9 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res, next) => {
-  setTimeout(() => {
-    next(new Error("hello world!"));
-  }, 2000);
+  res.json({ message: "hello" });
 });
 
 app.use("/api", protect, router);
