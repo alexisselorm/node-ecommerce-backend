@@ -3,7 +3,7 @@ import logger from "../helpers/telegramLoggerExtension";
 
 export const getUpdates = async (req, res) => {
   const products = await prisma.product.findMany({
-    where: { belongsTo: req.user.id },
+    where: { userId: req.user.id },
     include: { updates: true },
   });
 
@@ -38,7 +38,7 @@ export const createUpdate = async (req, res) => {
   try {
     logger.info("Atttempting update");
     const update = await prisma.update.create({
-      data: req.body,
+      data: { updatedAt: new Date().toISOString(), ...req.body },
     });
     res.json({ data: update });
     logger.info("Update successful");
@@ -65,7 +65,7 @@ export const updateUpdate = async (req, res) => {
   }
   const updatedUpdate = await prisma.update.update({
     where: { id: req.params.id },
-    data: req.body,
+    data: { updatedAt: new Date().toISOString(), ...req.body },
   });
 
   res.json({ data: updatedUpdate });
